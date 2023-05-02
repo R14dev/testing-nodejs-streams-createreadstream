@@ -1,6 +1,7 @@
 import http from "http";
 import routes from "./routes.js";
 import { getContententPage, notFounPage } from "./manageFile.js";
+import loadStaticFile from "./static.js";
 
 const server = http.createServer((req, res) => {
   const { method, url } = req;
@@ -14,12 +15,14 @@ const server = http.createServer((req, res) => {
     } else {
       // transform url to array , and get paramters by route parameter
       path = url.split("/");
-
     }
     const findRoute = routes.find((r) => r === path[1]);
     if (findRoute) {
       return getContententPage(res, findRoute);
     } else {
+      if (url.includes("assets")) {
+        return loadStaticFile(res, url);
+      }
       return notFounPage(res);
     }
   }

@@ -10,8 +10,8 @@ export async function getContententPage(res, page, params = null) {
     stream.then((data) => {
       data.on("data", (chuncked) => {
         res.setHeader("Cache-Control", Header.cache);
-        res.setHeader("Content-Type", "text/html");
-        res.writeHead(200, { "Content-Type": "text/html" });
+        res.setHeader("Content-Type", Header.ContentType.html);
+        res.writeHead(200, { "Content-Type": Header.ContentType.html });
         res.write(chuncked);
         res.end();
       });
@@ -24,7 +24,7 @@ export async function getContententPage(res, page, params = null) {
 async function getFileContent(path) {
   try {
     access(`${pages}/${path}.html`, fs.constants.F_OK, (err) => {
-      if (err) throw err;
+      if (err) throw new Error(err);
     });
     const stream = createReadStream(`${pages}/${path}.html`, "utf8");
     return stream;
@@ -39,6 +39,7 @@ export function notFounPage(res) {
     stream.then((data) => {
       data.on("data", (chuncked) => {
         res.setHeader("Cache-Control", Header.cache);
+        res.setHeader("Content-Type", Header.ContentType.html);
         res.writeHead(404, { "Content-Type": "text/html" });
         res.write(chuncked);
         res.end();
