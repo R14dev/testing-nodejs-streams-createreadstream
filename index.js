@@ -4,8 +4,10 @@ import Route from "./routes.js";
 
 const handler = async (request, response) => {
   const { url, method } = request;
+  let chosenRoute = {};
   const route = `${url}:${method}`.toLocaleLowerCase();
-  const chosenRoute = Route[route] || Route.default;
+  if ("/:get" === route) chosenRoute = Route.default;
+  else chosenRoute = Route[route] || Route.notFound;
   loadStaticFile(response, url);
   return chosenRoute(request, response);
 };
