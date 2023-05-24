@@ -1,1 +1,2 @@
-alert(0)
+"use strict";
+
